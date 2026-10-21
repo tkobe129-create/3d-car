@@ -5,7 +5,7 @@
 | 页面 | 在线地址 | 说明 |
 |---|---|---|
 | 陀螺仪 & 加速器 Demo | https://tkobe129-create.github.io/3d-car/ | 实时显示手机加速器 / 方向角数据 |
-| 广州小蛮腰 · 全息光效 | https://tkobe129-create.github.io/3d-car/canton-tower/ | 倾斜手机驱动的广州塔全息卡片（WebGL） |
+| 广州小蛮腰 · 全息光效 | https://tkobe129-create.github.io/3d-car/canton-tower/ | 陀螺仪 / 加速度计驱动的实时 WebGL 全息卡片：多图层视差、衍射光栅 + 菲涅尔着色、虚拟微镜闪点、金属印章环境贴图高光 |
 
 两个页面都会调用手机的陀螺仪 / 加速器：iOS 13+ 会在点击按钮后弹出系统权限请求，Android 直接可用；传感器 API 只能在 HTTPS 下工作，GitHub Pages 已强制 HTTPS。
 
