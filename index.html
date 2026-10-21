@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>陀螺仪 & 加速器 Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      line-height: 1.8;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      border: none;
+      border-radius: 12px;
+      background: #007aff;
+      color: #fff;
+    }
+    .card {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #f2f2f7;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <button id="requestBtn">🔓 开启陀螺仪 & 加速器权限</button>
+  <div id="output" class="card">等待数据...</div>
+  <div id="orientation" class="card">等待方向数据...</div>
+
+  <script>
+    const fmt = (v) => (typeof v === 'number' ? v.toFixed(2) : '--');
+    let listening = false;
+
+    // 传感器 API 只能在 HTTPS 下使用（GitHub Pages 默认就是 HTTPS）
+    if (!window.isSecureContext) {
+      document.getElementById('output').textContent = '⚠️ 请通过 HTTPS 打开本页面，否则无法读取传感器';
+    }
+
+    document.getElementById('requestBtn').addEventListener('click', async () => {
+      // ① 检测是否需要请求权限（iOS 13+）
+      if (
+        typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function'
+      ) {
+        try {
+          // ② 同时请求 Motion（加速器+陀螺仪）和 Orientation（方向）权限
+          const [motionPermission, orientationPermission] = await Promise.all([
+            DeviceMotionEvent.requestPermission(),
+            DeviceOrientationEvent.requestPermission()
+          ]);
+
+          if (motionPermission === 'granted' && orientationPermission === 'granted') {
+            startListening();
+          } else {
+            alert('权限被拒绝：请彻底关闭 Safari（从后台划掉）后重新打开本页再试。');
+          }
+        } catch (error) {
+          console.error('请求权限失败：', error);
+          document.getElementById('output').textContent = '请求权限失败：' + error.message;
+        }
+      } else {
+        // 非 iOS 或旧版设备，直接监听
+        startListening();
+      }
+    });
+
+    function startListening() {
+      if (listening) return; // 防止重复点击重复注册监听
+      listening = true;
+
+      // 加速器（含重力）
+      window.addEventListener('devicemotion', (event) => {
+        const acc = event.accelerationIncludingGravity || {};
+        document.getElementById('output').innerHTML = `
+          <b>加速器（含重力）</b><br>
+          X: ${fmt(acc.x)}<br>
+          Y: ${fmt(acc.y)}<br>
+          Z: ${fmt(acc.z)}
+        `;
+      });
+
+      // 陀螺仪（方向角）—— 手机上看不到 console，直接显示在页面上
+      window.addEventListener('deviceorientation', (event) => {
+        document.getElementById('orientation').innerHTML = `
+          <b>陀螺仪（方向角）</b><br>
+          Alpha（Z轴）: ${fmt(event.alpha)}°<br>
+          Beta（X轴）: ${fmt(event.beta)}°<br>
+          Gamma（Y轴）: ${fmt(event.gamma)}°
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
