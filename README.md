@@ -1,10 +1,15 @@
 # 3d-car
 
-手机陀螺仪 & 加速器 Demo —— 纯静态页面，通过 GitHub Pages 部署。
+纯静态页面合集，通过 GitHub Pages 部署。
 
-🔗 **在线地址：** https://tkobe129-create.github.io/3d-car/
+| 页面 | 在线地址 | 说明 |
+|---|---|---|
+| 陀螺仪 & 加速器 Demo | https://tkobe129-create.github.io/3d-car/ | 实时显示手机加速器 / 方向角数据 |
+| 广州小蛮腰 · 全息光效 | https://tkobe129-create.github.io/3d-car/canton-tower/ | 倾斜手机驱动的广州塔全息卡片（WebGL） |
 
-## 使用方法
+两个页面都会调用手机的陀螺仪 / 加速器：iOS 13+ 会在点击按钮后弹出系统权限请求，Android 直接可用；传感器 API 只能在 HTTPS 下工作，GitHub Pages 已强制 HTTPS。
+
+## 陀螺仪 & 加速器 Demo 使用方法
 
 1. 用手机浏览器（建议 Safari / Chrome）打开上面的链接（必须是 HTTPS，GitHub Pages 默认即为 HTTPS）。
 2. 点击「🔓 开启陀螺仪 & 加速器权限」按钮。
